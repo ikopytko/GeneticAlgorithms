@@ -73,6 +73,7 @@ class Map : IMap
         
         Array.Clear(_memory);
         int posX = _start.X, posY = _start.Y;
+        var penalty = 0;
         foreach (var direction in path)
         {
             (int moveX, int moveY) = (Direction)direction switch
@@ -89,6 +90,8 @@ class Map : IMap
                 var cell = _map[posY + moveY, posX + moveX];
                 if (cell is 0 or 2 or 3)
                 {
+                    if (_memory[posY, posX] != 0)
+                        penalty++;
                     _memory[posY, posX] = 5 + direction;
                     posX += moveX;
                     posY += moveY;
@@ -98,7 +101,7 @@ class Map : IMap
 
         var diffX = Math.Abs(posX - _end.X);
         var diffY = Math.Abs(posY - _end.Y);
-        return 1.0 / (diffX + diffY + 1);
+        return 1.0 / (diffX + diffY + 1 + penalty);
     }
 
     /// <summary>
