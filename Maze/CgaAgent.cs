@@ -17,7 +17,7 @@ class CgaAgent
     private bool _isBusy;
 
     public int Generation => _generation;
-    public Genome FittestGenome => _genomes[_fittestGenome];
+    public double FittestGenome => _bestFitnessScore;
 
     private void Mutate(ref int[] bits)
     {
@@ -136,13 +136,13 @@ class CgaAgent
         CreateStartPopulation();
     }
 
-    public void Run()
+    public IEnumerable<int> Run()
     {
         _isBusy = true;
         while (_isBusy)
         {
             Epoch();
-            Render();
+            yield return _generation;
         }
     }
 

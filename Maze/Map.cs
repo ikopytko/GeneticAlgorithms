@@ -17,6 +17,7 @@ public interface IMap
 
 class Map : IMap
 {
+    private readonly IMapPrinter _mapPrinter;
     private readonly int[,] _map;
     private readonly int _width;
     private readonly int _height;
@@ -26,9 +27,10 @@ class Map : IMap
 
     private readonly int[,] _memory;
     
-    public Map(int[,] mapData)
+    public Map(int[,] mapData, IMapPrinter mapPrinter)
     {
         _map = mapData;
+        _mapPrinter = mapPrinter;
 
         _height = _map.GetLength(0);
         _width = _map.GetLength(1);
@@ -104,38 +106,8 @@ class Map : IMap
     /// </summary>
     public void PrintMap()
     {
-        for (var row = 0; row < _height; row++)
-        {
-            for (var col = 0; col < _width; col++)
-            {
-                if (_memory[row, col] != 0)
-                {
-                    var c = GetPrintableChar(_memory[row, col]);
-                    Console.Write(c);
-                }
-                else
-                {
-                    var c = GetPrintableChar(_map[row, col]);
-                    Console.Write(c);
-                }
-            }
-
-            Console.WriteLine();
-        }
+        _mapPrinter.Print(_map, _memory);
     }
-    
-    private char GetPrintableChar(int cellType) => cellType switch
-    {
-        0 => '.',
-        1 => '#',
-        2 => '>',
-        3 => '@',
-        5 => '↑',
-        6 => '↓',
-        7 => '→',
-        8 => '←',
-        _ => '?'
-    };
 }
 
 enum Direction

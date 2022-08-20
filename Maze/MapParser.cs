@@ -17,12 +17,12 @@ public class StringMapParser : IMapParser
     {
         var lines = _source.Split(Environment.NewLine);
         var map = new int[lines.Length, lines[0].Length];
-        for (int row = 0; row < lines.Length; row++)
+        for (var row = 0; row < lines.Length; row++)
         {
             var line = lines[row];
             if (line.Length != map.GetLength(1))
                 throw new ArgumentException(line);
-            for (int col = 0; col < line.Length; col++)
+            for (var col = 0; col < line.Length; col++)
             {
                 map[row, col] = int.Parse(line.AsSpan().Slice(col, 1));
             }

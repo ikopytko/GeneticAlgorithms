@@ -19,9 +19,14 @@ string mapData =
 111111111111111";
 
 IMapParser parser = new StringMapParser(mapData);
-var map = new Map(parser.GetMap());
+IMapPrinter printer = new ConsoleMapPrinter();
+var map = new Map(parser.GetMap(), printer);
 
 var agent = new CgaAgent(map, crossoverRate, mutationRate, populationSize, chromosomeLength, geneLength);
 
-agent.Run();
-Console.WriteLine(agent.Generation);
+foreach (var generation in agent.Run())
+{
+    Console.WriteLine($"Generation {generation} fittest score: {agent.FittestGenome}");
+}
+agent.Render();
+
