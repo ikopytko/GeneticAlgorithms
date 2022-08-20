@@ -11,8 +11,8 @@
     private double _bestFitnessScore;
     private double _totalFitnessScore;
     private int _generation;
-    private Map _map;
-    private Map _bestPass;
+    private IMap _map;
+    private IMap _bestPass;
     private bool _isBusy;
 
     public int Generation => _generation;
@@ -124,14 +124,14 @@
         }
     }
 
-    public CgaAgent(double crossoverRate, double mutationRate, int populationSize, int chromosomeLength, int geneLength)
+    public CgaAgent(IMap map, double crossoverRate, double mutationRate, int populationSize, int chromosomeLength, int geneLength)
     {
         _crossoverRate = crossoverRate;
         _mutationRate = mutationRate;
         _chromosomeLength = chromosomeLength;
         _geneLength = geneLength;
         _populationSize = populationSize;
-        _map = new Map();
+        _map = map;
         CreateStartPopulation();
     }
 

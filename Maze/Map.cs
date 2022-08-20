@@ -1,4 +1,19 @@
-﻿class Map
+﻿public interface IMap
+{
+    /// <summary>
+    /// Takes a series of directions and evaluate travelled distance.
+    /// </summary>
+    /// <param name="path">Path to travel</param>
+    /// <returns>Fitness score proportional to the distance reached from the exit</returns>
+    double TestRoute(List<int> path);
+
+    /// <summary>
+    /// Print current map to the console
+    /// </summary>
+    void PrintMap();
+}
+
+class Map : IMap
 {
     private readonly int[,] _map;
     private readonly int _width;
