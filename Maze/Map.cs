@@ -53,9 +53,6 @@ class Map : IMap
                 _end = new Cell(x, y);
             }
         }
-
-        Console.WriteLine($"START: {_start}");
-        Console.WriteLine($"END:   {_end}");
     }
 
     /// <summary>
@@ -81,7 +78,8 @@ class Map : IMap
                 Direction.North => (0, -1),
                 Direction.South => (0, 1),
                 Direction.East =>  (1, 0),
-                Direction.West =>  (-1, 0)
+                Direction.West =>  (-1, 0),
+                _ => throw new ArgumentOutOfRangeException($"Unknown direction: {direction}")
             };
             
             if ((posX + moveX) >= 0 && (posX + moveX) < _width &&

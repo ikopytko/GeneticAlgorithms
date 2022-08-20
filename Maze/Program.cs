@@ -26,7 +26,8 @@ var agent = new CgaAgent(map, crossoverRate, mutationRate, populationSize, chrom
 
 foreach (var generation in agent.Run())
 {
+    Console.Clear();
     Console.WriteLine($"Generation {generation} fittest score: {agent.FittestGenome}");
+    agent.Render();
 }
-agent.Render();
 

@@ -3,6 +3,7 @@
 class CgaAgent
 {
     private readonly Random _random = new();
+    private readonly IMap _map;
     private List<Genome> _genomes;
     private readonly int _populationSize;
     private readonly double _crossoverRate;
@@ -13,11 +14,69 @@ class CgaAgent
     private double _bestFitnessScore;
     private double _totalFitnessScore;
     private int _generation;
-    private readonly IMap _map;
     private bool _isBusy;
 
     public int Generation => _generation;
     public double FittestGenome => _bestFitnessScore;
+
+    public CgaAgent(IMap map, double crossoverRate, double mutationRate, int populationSize, int chromosomeLength, int geneLength)
+    {
+        _crossoverRate = crossoverRate;
+        _mutationRate = mutationRate;
+        _chromosomeLength = chromosomeLength;
+        _geneLength = geneLength;
+        _populationSize = populationSize;
+        _map = map;
+        CreateStartPopulation();
+    }
+
+    public IEnumerable<int> Run()
+    {
+        _isBusy = true;
+        while (_isBusy)
+        {
+            Epoch();
+            yield return _generation;
+        }
+    }
+
+    public void Epoch()
+    {
+        UpdateFitnessScore();
+        var newBabies = 0;
+        List<Genome> babyGenomes = new List<Genome>();
+
+        while (newBabies < _populationSize)
+        {
+            Genome mum = RouletteWheelSelection();
+            Genome dad = RouletteWheelSelection();
+
+            Genome baby1 = new Genome();
+            Genome baby2 = new Genome();
+            Crossover(mum.Bits, dad.Bits, out baby1.Bits, out baby2.Bits);
+            
+            Mutate(ref baby1.Bits);
+            Mutate(ref baby2.Bits);
+            
+            babyGenomes.Add(baby1);
+            babyGenomes.Add(baby2);
+
+            newBabies += 2;
+        }
+
+        _genomes = babyGenomes;
+        _generation++;
+    }
+
+    public void Render()
+    {
+        Console.WriteLine(_bestFitnessScore);
+        _map.PrintMap();
+    }
+    
+    public bool Started() => _isBusy;
+    
+    public void Stop() => _isBusy = false;
 
     private void Mutate(ref int[] bits)
     {
@@ -124,61 +183,4 @@ class CgaAgent
             _genomes.Add(Genome.Random(_chromosomeLength));
         }
     }
-
-    public CgaAgent(IMap map, double crossoverRate, double mutationRate, int populationSize, int chromosomeLength, int geneLength)
-    {
-        _crossoverRate = crossoverRate;
-        _mutationRate = mutationRate;
-        _chromosomeLength = chromosomeLength;
-        _geneLength = geneLength;
-        _populationSize = populationSize;
-        _map = map;
-        CreateStartPopulation();
-    }
-
-    public IEnumerable<int> Run()
-    {
-        _isBusy = true;
-        while (_isBusy)
-        {
-            Epoch();
-            yield return _generation;
-        }
-    }
-
-    public void Epoch()
-    {
-        UpdateFitnessScore();
-        var newBabies = 0;
-        List<Genome> babyGenomes = new List<Genome>();
-
-        while (newBabies < _populationSize)
-        {
-            Genome mum = RouletteWheelSelection();
-            Genome dad = RouletteWheelSelection();
-
-            Genome baby1 = new Genome();
-            Genome baby2 = new Genome();
-            Crossover(mum.Bits, dad.Bits, out baby1.Bits, out baby2.Bits);
-            
-            Mutate(ref baby1.Bits);
-            Mutate(ref baby2.Bits);
-            
-            babyGenomes.Add(baby1);
-            babyGenomes.Add(baby2);
-
-            newBabies += 2;
-        }
-
-        _genomes = babyGenomes;
-        _generation++;
-    }
-
-    public void Render()
-    {
-        Console.WriteLine(_bestFitnessScore);
-        _map.PrintMap();
-    }
-    public bool Started() => _isBusy;
-    public void Stop() => _isBusy = false;
 }
