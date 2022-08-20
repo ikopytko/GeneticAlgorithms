@@ -1,0 +1,1 @@
+﻿This is .NET 6 implementation of maze solving using genetic algorithm from chapter 2 of [AI Techniques for Game Programming by Mat Buckland](https://www.amazon.com/Techniques-Programming-Premier-Press-Development/dp/193184108X)
