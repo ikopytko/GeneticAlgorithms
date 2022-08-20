@@ -1,5 +1,4 @@
-﻿
-using Maze;
+﻿using Maze;
 
 const double crossoverRate = 0.7;
 const double mutationRate = 0.001;

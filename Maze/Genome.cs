@@ -1,7 +1,9 @@
-﻿class Genome
+﻿namespace Maze;
+
+class Genome
 {
-    public int[] bits;
-    public double fitness;
+    public int[] Bits;
+    public double Fitness = 0;
 
     public static Genome Random(int length)
     {
@@ -14,7 +16,7 @@
 
         return new Genome
         {
-            bits = bits
+            Bits = bits
         };
     }
 }

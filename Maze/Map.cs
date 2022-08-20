@@ -1,4 +1,6 @@
-﻿public interface IMap
+﻿namespace Maze;
+
+public interface IMap
 {
     /// <summary>
     /// Takes a series of directions and evaluate travelled distance.
@@ -71,23 +73,14 @@ class Map : IMap
         int posX = _start.X, posY = _start.Y;
         foreach (var direction in path)
         {
-            int moveX = 0, moveY = 0;
-            switch ((Direction)direction)
+            (int moveX, int moveY) = (Direction)direction switch
             {
-                case Direction.North:
-                    moveY = -1;
-                    break;
-                case Direction.South:
-                    moveY = 1;
-                    break;
-                case Direction.East:
-                    moveX = 1;
-                    break;
-                case Direction.West:
-                    moveX = -1;
-                    break;
-            }
-
+                Direction.North => (0, -1),
+                Direction.South => (0, 1),
+                Direction.East =>  (1, 0),
+                Direction.West =>  (-1, 0)
+            };
+            
             if ((posX + moveX) >= 0 && (posX + moveX) < _width &&
                 (posY + moveY) >= 0 && (posY + moveY) < _height)
             {

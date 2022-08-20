@@ -1,6 +1,8 @@
-﻿class CgaAgent
+﻿namespace Maze;
+
+class CgaAgent
 {
-    private readonly Random _random = new Random();
+    private readonly Random _random = new();
     private List<Genome> _genomes;
     private readonly int _populationSize;
     private readonly double _crossoverRate;
@@ -11,8 +13,7 @@
     private double _bestFitnessScore;
     private double _totalFitnessScore;
     private int _generation;
-    private IMap _map;
-    private IMap _bestPass;
+    private readonly IMap _map;
     private bool _isBusy;
 
     public int Generation => _generation;
@@ -51,7 +52,7 @@
 
         for (var i = 0; i < _populationSize; i++)
         {
-            cfTotal += _genomes[i].fitness;
+            cfTotal += _genomes[i].Fitness;
             if (cfTotal > slice)
             {
                 selectedGenome = i;
@@ -74,10 +75,10 @@
         for (var i = 0; i < _genomes.Count; i++)
         {
             var genome = _genomes[i];
-            var path = Decode(genome.bits);
+            var path = Decode(genome.Bits);
 
             var fitness = _map.TestRoute(path);
-            genome.fitness = fitness;
+            genome.Fitness = fitness;
             _totalFitnessScore += fitness;
             if (fitness > _bestFitnessScore)
             {
@@ -158,10 +159,10 @@
 
             Genome baby1 = new Genome();
             Genome baby2 = new Genome();
-            Crossover(mum.bits, dad.bits, out baby1.bits, out baby2.bits);
+            Crossover(mum.Bits, dad.Bits, out baby1.Bits, out baby2.Bits);
             
-            Mutate(ref baby1.bits);
-            Mutate(ref baby2.bits);
+            Mutate(ref baby1.Bits);
+            Mutate(ref baby2.Bits);
             
             babyGenomes.Add(baby1);
             babyGenomes.Add(baby2);
